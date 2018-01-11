@@ -26,6 +26,8 @@ from keras.callbacks import LearningRateScheduler
 from keras.layers import LSTM, ConvLSTM2D
 from keras.utils.generic_utils import CustomObjectScope
 
+#Réseau de neurones avec les données brutes
+
 os.environ['TF_CPP_MIN_LOG_LEVEL']='3'
 
 def f1(y_true, y_pred):
