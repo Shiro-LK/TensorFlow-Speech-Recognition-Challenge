@@ -10,7 +10,7 @@ from scipy import signal
 import math
 import random
 import numpy as np
-from preprocess_spectogram import load_data_with_spectrogram, prepare_data
+from preprocess import load_data_with_spectrogram, prepare_data, load_data_with_mel_spectrogram
 from collections import Counter
 from scipy.io import wavfile
 import keras
@@ -79,6 +79,7 @@ def copy_weight(newmodel, oldmodel):
             layer.set_weights(dic_w[layer.name])
             print(layer.name)
     return newmodel
+
 def train_with_generator(path, file, file_test, output, epochs, batch_size, checkpoint, shuffle=False):
     
     # prepare data
@@ -89,8 +90,12 @@ def train_with_generator(path, file, file_test, output, epochs, batch_size, chec
     #x_train, x_test, y_train , y_test = train_test_split(X, Y, test_size=0.2)#, stratify=y)
     
     
-    train_generator = batch_generator_shuffle(batch_size, x_train, y_train, load_data_with_spectrogram, window_size=20, step_size=10, eps=1e-10, data_aug=True, proba_data_aug=0.6, coeff_noise=0.3, coeff_time=4000)
-    
+    #train_generator = batch_generator_shuffle(batch_size, x_train, y_train, load_data_with_spectrogram, window_size=20, step_size=10, eps=1e-10, data_aug=True, proba_data_aug=0.6, coeff_noise=0.3, coeff_time=4000)
+
+    train_generator = batch_generator_shuffle(batch_size, x_train, y_train, load_data_with_mel_spectrogram, window_size=20,
+                                              step_size=10, eps=1e-10, data_aug=True, proba_data_aug=0.6,
+                                              coeff_noise=0.3)
+
     test_generator = batch_generator(batch_size, x_test, y_test, load_data_with_spectrogram)
     
     step_train = math.ceil(len(x_train)/batch_size)
